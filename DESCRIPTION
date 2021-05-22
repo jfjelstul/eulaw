@@ -1,0 +1,14 @@
+Package: eulaw
+Title: An R Interface to the eulaw.app API
+Version: 0.1.0.9000
+Authors@R: person(given = "Joshua",
+          family = "Fjelstul",
+          role = c("aut", "cre"),
+          email = "joshfjelstul@gmail.com",
+          comment = c(ORCID = "0000-0002-9494-260X"))
+Description: This package provides functions to access data on EU law from the eulaw.app database using the eulaw.app API. The eulaw.app database includes data from a number of databases by Joshua C. Fjelstul, Ph.D. including the Evolution of European Union Law (EvoEU) Database, the European Commission Internal Organization (ECIO) Database, the European Union Infringement Procedure (EUIP) Database, the European Union State Aid (EUSA) Database, the European Union Technical Regulations (EUTR) Database, and the European Union Member State (EUMS) Database. 
+URL: https://github.com/jfjelstul/eulaw
+Date: 2021-05-21
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
