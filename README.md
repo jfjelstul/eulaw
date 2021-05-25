@@ -207,6 +207,6 @@ View(out)
 
 The `download_data()` function downloads the data in batches of `10000` observations. The `eulaw.app` API has a rate limit, but this function automatically manages the rate limit for us. It will download `1` batch approximately every `5` seconds. 
 
-The function prints some useful information to the `console` while the data downloads. It tells us how many observations we have requested, how many batches it will take to download the data, and approximately how long it will take. It provides an update every time a batch is download and counts down to the next batch. The function returns a `tibble` in `tidy` format that we can manipulate with `dplyr` and `tidyr`.
+The function prints some useful information to the `console` while the data downloads. It tells us how many observations we have requested, how many batches it will take to download the data, and approximately how long it will take. It provides an update every time a batch is downloaded and counts down to the next batch. The function returns a `tibble` that we can manipulate with `dplyr` and `tidyr`.
 
 And that's it! We now have a research-ready dataset in our `R` workspace. 
