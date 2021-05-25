@@ -1,3 +1,4 @@
+
 # eulaw
 
 An `R` package to access data from the `eulaw.app` API. This package provides an intuitive, easy-to-use R interface for the `eulaw.app` API. This API provides access to a variety of research-ready databases, including:
@@ -7,7 +8,7 @@ An `R` package to access data from the `eulaw.app` API. This package provides an
 + The European Union Infringement Procedure ([EUIP](https://github.com/jfjelstul/euip)) Database
 + The European Union State Aid ([EUSA](https://github.com/jfjelstul/eusa)) Database
 + The European Union Technical Regulations ([EUTR](https://github.com/jfjelstul/eutr)) Database
-+ The European Union Member States ([EUMS](https://github.com/jfjelstul/eums)) Database. 
++ The European Union Member States ([EUMS](https://github.com/jfjelstul/eums)) Database
 
 Replication materials and documentation are available in the GitHub respository for each database. 
 
@@ -114,17 +115,17 @@ Response received...
 If we already know we're looking for the `decisions_ddy` dataset, but we still want to double-check the dataset description or the variable descriptions, we can download just the section of the `euip` codebook for the `decisions_ddy` dataset.
 
 ```r
-> codebook <- download_codebook(database = "euip", dataset = "decisions_ddy")
+> out <- download_codebook(database = "euip", dataset = "decisions_ddy")
 Requesting data via the eulaw.app API...
 Response received...
-> View(codebook)
+> View(out)
 ```
 
 ### Searching for data
 
-Now that we know what database (`ecio`) and dataset ('decisions_ddy') we need, and how to access the documentation, we're ready to download the data. Here, we're specifically looking for directed dyad-year data on letters of formal notice and reasoned opinions under Article 258 TFEU, so we don't need to download the entire `decisions_ddy` dataset, which also includes data on referrals to the Court and decisions under Article 260 TFEU. Instead of downloading the entire dataset, we can filter the data using the API and download just what we're looking for. 
+Now that we know what database and dataset we need, and how to access the documentation, we're ready to download the data. We're specifically looking for directed dyad-year data on letters of formal notice and reasoned opinions under Article 258 TFEU, so we don't need to download the entire `decisions_ddy` dataset, which also includes data on referrals to the Court and decisions under Article 260 TFEU. Instead of downloading the entire dataset, we can filter the data using the API and download just what we're looking for. 
 
-We can use the `download_data()` function to download the data. This function takes two required arguments, `database` and `dataset`, and one optional argument, `parameters`. The `parameters` argument should be a `list` that specifies values for API parameters. API parameters correspond to variables in each dataset and let you filter the data.
+We can use the `download_data()` function to download the data. This function takes two required arguments, `database` and `dataset`, and one optional argument, `parameters`. The `parameters` argument should be a `list` that specifies values for API parameters. API parameters correspond to variables in each dataset and let you filter the data. The `download_data()` function will warn us if we try to include invalid API parameters.
 
 ### Looking up API parameters
 
@@ -148,7 +149,7 @@ We can see there are `5` API parameters for the `decisions_ddy` dataset. General
 
 ### Looking up API parameter values
 
-We want to use the `decision_stage_id` parameter and the `year_min` parameter, which will let us filter the data by decision stage and year. For the `year_min` parameter, we just need to specify a year. For the parameter `decision_stage_id`, we need to know what values to provide in order to get letters of formal notice and reasoned opinions under Article 258 TFEU. We can always look up the corresponding variables, `decision_stage_id` and `decision_stage`, in the codebook (as above). But we can easily see the unique values of `decision_stage_id` using the function `list_parameter_values()`. This function has two required arguments, `database` and `parameter`. API parameters are often used across multiple datasets and always have the same coding within a database, so we don't need to specify which dataset we're interested in.
+We want to use the `decision_stage_id` parameter and the `year_min` parameter, which will let us filter the data by decision stage and year. For the `year_min` parameter, we just need to specify a year. For the parameter `decision_stage_id`, we need to know what values to provide in order to get letters of formal notice and reasoned opinions under Article 258 TFEU. We can always look up the corresponding variables, `decision_stage_id` and `decision_stage`, in the codebook (as above). But we can easily see the unique values of `decision_stage_id` using the function `list_parameter_values()`. This function has two required arguments, `database` and `parameter`. API parameters are often appear in multiple datasets within the same database and are always coded the same way across datasets, so we don't need to specify which dataset we're interested in.
 
 ```r
 > list_parameter_values(database = "euip", parameter = "decision_stage_id")
@@ -173,16 +174,31 @@ We can see from the output that letters of formal notice are coded `1` and reaso
 Now that we know how to use API parameters, we can use `download_data()` to download just the data we're interested in. 
 
 ```r
-> data <- download_data(
+> out <- download_data(
 +   database = "euip",
 +   dataset = "decisions_ddy",
 +   parameters = list(
-+     min_year = 2010,
++     year_min = 2010,
 +     decision_stage_id = c(1, 2)
 +   )
 + )
+Requesting data via the eulaw.app API...
+Response received...
+Observations requested: 18300
+Downloading 10000 observations every 5 seconds...
+Total estimated time: 0.08 minutes (5 seconds)
+Batch 1 of 2 complete (observations 1 to 10000 of 18300)
+Batch 2 of 2 complete (observations 10001 to 18300 of 18300)
+Your download is complete                         
+
+If you use this database in a paper or project, please use the following citation:
+
+Joshua C. Fjelstul (2021). eulaw: An R Interface to the eulaw.app API. R package version 0.1.0.9000. https://github.com/jfjelstul/eulaw
+> View(out)
 ```
 
-The `download_data()` function downloads the data in batches of `10000` observations. The `eulaw.app` API has a rate limit, but this function automatically manages the rate limit for us. It will download `1` batch approximately every `5` seconds. The function prints some useful information to the `console` while the data downloads. It tells us how many observations we have requested, how many batches it will take to download the data, and approximately how long it will take. It provides an update every time a batch is download and counts down to the next batch. The function returns a `tibble` in `tidy` format that we can manipulate with `dplyr` and `tidyr`.
+The `download_data()` function downloads the data in batches of `10000` observations. The `eulaw.app` API has a rate limit, but this function automatically manages the rate limit for us. It will download `1` batch approximately every `5` seconds. 
+
+The function prints some useful information to the `console` while the data downloads. It tells us how many observations we have requested, how many batches it will take to download the data, and approximately how long it will take. It provides an update every time a batch is download and counts down to the next batch. The function returns a `tibble` in `tidy` format that we can manipulate with `dplyr` and `tidyr`.
 
 And that's it! Now we have a research-ready dataset to use. 
