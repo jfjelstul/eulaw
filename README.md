@@ -23,10 +23,6 @@ You can install the latest development version of the `eulaw` package from GitHu
 devtools::install_github("jfjelstul/eulaw")
 ```
 
-## Documentation
-
-The `eulaw` package includes comprehensive documentation. You can also read the documentation on the [package website](https://jfjelstul.github.io/eulaw/). You can use the function `search_codebook()` to read the documentation for each database.
-
 ## Citation
 
 If you use data from the `eulaw` package in a project or paper, please cite the package:
