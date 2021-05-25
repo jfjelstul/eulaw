@@ -50,7 +50,7 @@ If you notice an error in the data or a bug in the `R` package, please report it
 
 ## Example: Getting data on the EU infringement procedure
 
-Suppose we want directed dyad-year data on letters of formal notice and reasoned opinions under Article 258 of the Treaty on the Functioning of the European Union (TFEU) in infringement cases since 2010. This data is available from the European Union Infringement Procedure (EUIP) Databse, which is part of the European Union Compliance Project (EUCP). 
+Suppose we want directed dyad-year data on decisions in infringement cases (i.e., the number of decisions opened by each Commission department against each member state per year). Further, suppose we want data only on letters of formal notice and reasoned opinions under Article 258 of the Treaty on the Functioning of the European Union (TFEU) since 2010. This data is available from the European Union Infringement Procedure (EUIP) Databse, which is part of the European Union Compliance Project (EUCP). 
 
 We can easily get exactly the data we're looking for right from `R` in just a few easy steps using the `eulaw` package, which is an `R` interface for the `eulaw.app` API. This API provides access to a variety of research-ready databases, including the EUIP Database. 
 
@@ -209,4 +209,4 @@ The `download_data()` function downloads the data in batches of `10000` observat
 
 The function prints some useful information to the `console` while the data downloads. It tells us how many observations we have requested, how many batches it will take to download the data, and approximately how long it will take. It provides an update every time a batch is download and counts down to the next batch. The function returns a `tibble` in `tidy` format that we can manipulate with `dplyr` and `tidyr`.
 
-And that's it! Now we have a research-ready dataset to use. 
+And that's it! We now have a research-ready dataset in our `R` workspace. 
