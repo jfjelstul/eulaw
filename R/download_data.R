@@ -3,8 +3,30 @@
 # eulaw R package
 ################################################################################
 
-#' Search the eulaw.app database
-
+#' Download data from the eulaw.app database
+#'
+#' This function downloads data via the eulaw.app API. You need to specify a
+#' database and a dataset that you want data from. You can use the
+#' \code{parameters} argument to filter the data using API parameters. If you
+#' leave this argument blank, the function will return the entire dataset. See
+#' the package vignette for an example of how to specify parameters. You can use
+#' the \code{list_parameters()} function to see a list of valid API parameters
+#' for each dataset and the \code{list_parameter_values()} function to see a
+#' list of valid values for each API paraemter.
+#'
+#' @param database The name of the database as a string. Use the function
+#'   \code{list_databases()} to see a list of valid values.
+#' @param dataset The name of the dataset as a string. Use the function
+#'   \code{list_datasets()} to see a list of valid values.
+#' @param parameters A named list that specifies a value for one or more valid
+#'   API parameters. The default is \code{NULL}. Use the function
+#'   \code{list_parameters()} to see a list of valid API parameters and the
+#'   funciton \code{list_parameter_values()} to see a list of valid values for
+#'   each API parameter. If this argument is set to \code{NULL}, the function
+#'   will return the entire dataset.
+#' @return A tibble with as many columns as there are variables in the requested
+#'   dataset.
+#'
 #' @export
 download_data <- function(database, dataset, parameters = NULL) {
   valid <- run_quietly(list_parameters(database, dataset))

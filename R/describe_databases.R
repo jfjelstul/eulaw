@@ -3,17 +3,17 @@
 # eulaw R package
 ################################################################################
 
-#' List eulaw.app databases
+#' Describe eulaw.app databases
 #'
-#' This function lists all of the databases that are available via the eulaw.app
+#' This function describes all of the databases that are available via the eulaw.app
 #' API.
 #'
-#' @return A tibble with 2 columns.
+#' @return A tibble with 3 columns.
 #' @export
-list_databases <- function() {
+describe_databases <- function() {
   url <- "https://www.api.eulaw.app/databases"
   out <- make_simple_request(url)
-  out <- dplyr::select(out, database_id, database)
+  out <- dplyr::select(out, database_id, database, description)
   return(out)
 }
 

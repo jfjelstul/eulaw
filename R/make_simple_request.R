@@ -29,6 +29,11 @@ make_simple_request <- function(url, key_id = FALSE, quietly = FALSE) {
   # convert to a tibble
   out <- dplyr::as_tibble(out)
 
+  # error handling
+  if (nrow(out) == 0) {
+    stop("API query not successful. Did you provide valid values?")
+  }
+
   # key ID
   if(key_id == TRUE) {
     out$key_id <- 1:nrow(out)
