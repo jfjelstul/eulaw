@@ -69,7 +69,7 @@ list_databases()
 # 6           6 eums  
 ```
 
-This function requests information via the `evoeu.app` API and returns a `tibble` (see the `tidyverse`) that lists the available databases. We're going to want the `euip` database.
+This function requests information via the `evoeu.app` API and returns a `tibble` (see the `tidyverse`) that lists the available databases. We're going to want the `euip` database. We could also use the `describe_databases()` function, which also gives a description of each database. 
 
 ### Looking up datasets
 
@@ -95,23 +95,23 @@ list_datasets(database = "euip")
 # # … with 12 more rows
 ```
 
-To see the whole list, we can assign the output to an object, as in `datasets <- list_datasets(database = "euip")`, and view it using `View(datasets)`. We're looking for `decisions_ddy`, which contains directed dyad-year data on decisions.
+To see the whole list, we can assign the output to an object, as in `datasets <- list_datasets(database = "euip")`, and view it using `View(datasets)`. We're looking for `decisions_ddy`, which contains directed dyad-year data on decisions. 
 
-### Checking the codebook
-
-If we don't already know we're looking for the `decisions_ddy` dataset, we can look at the codebook for the `euip` database, which contains descriptions of each dataset and variable, to see what's available and find the right dataset. We can look at the codebook for the `euip` database using the function `download_codebook()`. This function has one required argument, `database`, and one optional argument, `dataset`. It returns a `tibble`.
+If we don't already know we're looking for the `decisions_ddy` dataset, we can use the function `describe_datasets()`, which provides a description of each dataset, to see what's available and find the right one. 
 
 ```r
-out <- download_codebook(database = "euip")
+out <- describe_datasets(database = "euip")
 # Requesting data via the eulaw.app API...
 # Response received...
 View(out)
 ```
 
-If we already know we're looking for the `decisions_ddy` dataset, but we still want to double-check the dataset description or the variable descriptions, we can download just the section of the `euip` codebook for the `decisions_ddy` dataset.
+### Checking the codebook
+
+To double-check that the `decisions_ddy` dataset has the information we're looking for, we can look at the codebook using the function `describe_variables()`. This function has two required arguments, `database` and `dataset`. It returns a `tibble`.
 
 ```r
-out <- download_codebook(
+out <- describe_variables(
   database = "euip", 
   dataset = "decisions_ddy"
 )
@@ -147,11 +147,11 @@ list_parameters(
 # 5            5 decision_stage_id
 ```
 
-We can see there are `5` API parameters for the `decisions_ddy` dataset. Generally, each API parameter corresponds to one variable in the dataset. There is an API parameter for all variables ending in `_id`. The one exception to this rule is the `year` variable. If a dataset includes a `year` variable, there are two API parameters, `year_min` and `year_max`. This lets you to specify a range.
+We can see there are `5` API parameters for the `decisions_ddy` dataset. Generally, each API parameter corresponds to one variable in the dataset. There is an API parameter for all variables ending in `_id`. The one exception to this rule is the `year` variable. If a dataset includes a `year` variable, there are two API parameters, `year_min` and `year_max`. This lets you specify a range.
 
 ### Looking up API parameter values
 
-We want to use the `decision_stage_id` parameter and the `year_min` parameter, which will let us filter the data by decision stage and year. For the `year_min` parameter, we just need to specify a year. For the parameter `decision_stage_id`, we need to know what values to provide in order to get letters of formal notice and reasoned opinions under Article 258 TFEU. We can always look up the corresponding variables, `decision_stage_id` and `decision_stage`, in the codebook (as above). But we can easily see the unique values of `decision_stage_id` using the function `list_parameter_values()`. This function has two required arguments, `database` and `parameter`. API parameters are often appear in multiple datasets within the same database and are always coded the same way across datasets, so we don't need to specify which dataset we're interested in.
+We want to use the `decision_stage_id` parameter and the `year_min` parameter, which will let us filter the data by decision stage and year. For the `year_min` parameter, we just need to specify a year. For the parameter `decision_stage_id`, we need to know what values to provide in order to get letters of formal notice and reasoned opinions under Article 258 TFEU. We can look up the corresponding variables, `decision_stage_id` and `decision_stage`, in the codebook (as above). But we can easily see the unique values of `decision_stage_id` using the function `list_parameter_values()`. This function has two required arguments, `database` and `parameter`. API parameters often appear in multiple datasets within the same database, and are always coded the same way across datasets, so we don't need to specify which dataset we're interested in.
 
 ```r
 list_parameter_values(
